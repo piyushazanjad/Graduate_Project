@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html ng-app="movieapp">
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="/materialize-v0.97.6/materialize/css/materialize.min.css" media="screen,projection"
+    />
+    <link type="text/css" rel="stylesheet" href="mystyle.css" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="angular.min.js"></script>
+    <script src="index.js"></script>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body ng-controller="MovieController">
+
+    <nav class="red lighten-1">
+        <div class="nav-wrapper">
+            <ul>
+                <li> <i class="large material-icons black-text ">insert_theaters</i></li>
+                <li><a href="#!" class="brand-logo">BookmyMOVIE</a> </li>
+                <li> <i class="large material-icons black-text ">insert_theaters</i></li>
+            </ul>
+
+
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <!--  <li><i class="material-icons">search</i><<input type="text" ng-model="Searchbox"></li>-->
+                <li>
+                    <div class="red lighten-3">
+
+                        <div class="input-field">
+                            <input id="search" type="search" ng-model="Searchbox" placeholder="Search Movies"><i class="material-icons">search</i>
+                            <label for="search"><i class="mdi-action-search"></i></label><i class="mdi-navigation-close close"></i>
+                        </div>
+                    </div>
+                </li>
+                <li id="signin"><a class="waves-effect waves-light grey darken-3 btn modal-trigger" href="#login">SIGN IN</a></li>
+                <li hidden id="logout"><a class="waves-effect waves-light grey darken-3 btn modal-trigger" href="#login" ng-click="clear_values()">LOGOUT</a></li>
+                <li id="signup"><a class="waves-effect waves-light grey darken-3 btn modal-trigger" href="#register">SIGN UP</a></li>
+                <li hidden id="movie_add"><a class="waves-effect waves-light grey darken-3 btn modal-trigger" href="#addmovie">ADD MOVIE</a></li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="sass.html">Sass</a></li>
+                <li><a href="badges.html">Components</a></li>
+                <li><a href="collapsible.html">Javascript</a></li>
+                <li><a href="mobile.html">Mobile</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Modal Structure for login-->
+
+    <div id="login" class="modal">
+        <div class="modal_for_login">
+            <div class="modal-header">
+                <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat right ">X</a>
+            </div>
+            <div class="modal-content">
+                <div align="center">
+                    <h4>Login</h4></div><br>
+                <br>
+                <div class="input-field">
+                    <i class="material-icons prefix">account_circle</i>
+
+                    <input placeholder=" " ng-model="login.username" type="text" name="myfield" required>
+                    <label> <span ng-show="!login.username.length">Please enter username!</span>
+                <span ng-show="login.username.length">Good job!</span></label>
+
+
+                </div>
+                <div class="input-field">
+                    <i class="material-icons prefix">vpn_key</i>
+                    <input placeholder=" " ng-model="login.password" type="password" class="validate" required>
+                    <label><span ng-show="!login.password.length">Please enter password!</span>
+                 <span ng-show="login.password.length">Nice!</span></label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="login_button">
+                    <button class="waves-effect waves-red btn" type="submit" ng-disabled="!(!!login.username || !!login.password)" ng-click="account_login()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding movies-------------------------------------------------------->
+
+    <div id="addmovie" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>ADD NEW MOVIE</h4>
+
+            <label>Movie Name:
+                <input type="text" ng-model="moviegroup.movie_title" >
+            </label>
+            <label>Movie Rating:
+                <input type="text" ng-model="moviegroup.rating">
+            </label>
+
+            <label>Category:
+                <input type="text" ng-model="moviegroup.category">
+            </label>
+            <label>Description:
+                <input type="text" ng-model="moviegroup.desc">
+            </label><br>
+            <!--img---->
+
+            <label>Add Image Path:
+                <input type="text" ng-model="moviegroup.image">
+            </label><br>
+
+
+            <!--for showing show times-->
+
+
+
+
+
+
+
+            <div class="row">
+                <div class="col s3">
+                    <div ng-repeat="theater in theaters">
+                        <label>{{theater.theater_name}}</label>
+                        <div ng-repeat="show in theater.show_timings">
+                            <label>{{show.time}}</label>
+                            <label>{{show.seats}}</label>
+                        </div>
+                    </div>
+
+
+                    <label>Select Theatre</label>
+                    <select class="browser-default" ng-model="select_theater" ng-change="showSelectValue1(select_theater)">
+                                        <option value="" disabled selected>Set theater</option>
+                                        <option value="E-square">E-square</option>
+                                        <option value="City Pride">City Pride</option>
+                                        <option value="AMC Orange">AMC Orange</option>
+                                        <option value="City Pride Deccan">City Pride Deccan</option>        
+                    </select>
+                    <div ng-repeat="show in show_timings">
+                        <label>{{show.time}}</label>
+                        <label>{{show.seats}}</label>
+                    </div>
+
+                    <label>Select show Time</label>
+                    <select class="browser-default" ng-model="show_timing.time" ng-change="showSelectValue2(select_time)">
+                                            <option value="" disabled selected>Set shows</option>
+                                            <option value="9 AM">9 AM</option>
+                                            <option value="12 PM">12 PM</option>
+                                            <option value="3 PM">3 PM</option>
+                                            <option value="6 PM">6 PM</option>        
+                        </select>
+
+                    <label>Select seats</label>
+                    <select class="browser-default" ng-model="show_timing.seats" ng-change="showSelectValue3(select_seats)">
+                                            <option value="" disabled selected>Set Seats</option>
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                            <option value="30">30</option>
+                                            <option value="40">40</option>  
+                                            <option value="50">50</option>       
+                        </select>
+                    <button type="submit" id="" class="btn" ng-click="add_shows()">Add shows & seats</button><br><br>
+                    <button type="submit" id="" class="btn" ng-click="add_theater()">Add theater</button><br><br>
+                </div>
+                <!-- <button type="submit" id="" class="btn" ng-click="add_theater()">Add theater</button><br><br>   -->
+
+            </div>
+
+
+
+            <div id="show_times">
+
+
+                <table>
+                    <tr ng-repeat="item in items">
+                        <td><b>Theater:</b> {{item.theater}}</td>
+                        <p ng-repeat="data_items in item.show_time">
+
+                            <td><b>Time:</b> {{data_items.time}}</td>
+                            <td><b>Seats:</b> {{data_items.seats}}</td>
+                        </p>
+                    </tr>
+                </table>
+            </div>
+            <div class="add_movie_button">
+                <button type="submit" ng-click="add_movie()" id="" class="btn">Add movie</button>
+            </div>
+
+
+        </div>
+        <div class="modal-header">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat right ">X</a>
+
+        </div>
+    </div>
+
+
+
+
+    <!--------------------------------------------->
+
+    <!-- Modal for signup -->
+    <div id="register" class="modal modal-fixed-footer">
+        <div class="modal-header">
+            <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat right ">X</a>
+        </div>
+        <div align="center" class="modal-content">
+            <h4>Sign Up</h4>
+            <h5>Enter your personal details.</h5>
+            <input placeholder="First Name" type="text" ng-model="user.first_name" required/>
+            <input placeholder="Last Name" required type="text" ng-model="user.last_name" />
+            <input placeholder="Username" required type="text" ng-model="user.username">
+            <input placeholder="Password" required type="password" ng-model="user.password" name="password" class="password" />
+            <input placeholder="Date of Birth e.g mm/dd/yyyy" required type="text" ng-model="user.dob" />
+            <!-- <input type="date" class="datepicker" ng-model="user.dob">-->
+
+            <input placeholder="Age" required type="text" ng-model="user.age" />
+            <input placeholder="E-mail ID e.g example@abc.com" required type="email" ng-model="user.emailid" />
+            <div class="modal-footer">
+                <div class="register_button">
+                    <button class="waves-effect waves-red btn" type="submit" ng-click="register()">Register</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--slider-->
+
+
+    <div class="slider">
+        <ul class="slides">
+            <li>
+                <img src="xman.jpg">
+                <!-- random image -->
+
+            </li>
+            <li>
+                <img src="captain.jpg">
+                <!-- random image -->
+
+            </li>
+            <li>
+                <img src="mother.jpg">
+                <!-- random image -->
+
+            </li>
+            <li>
+                <img src="captain.jpg">
+                <!-- random image -->
+
+            </li>
+        </ul>
+    </div>
+
+
+
+
+
+    <!-- cards for showcasing movies -->
+    <div class="row">
+        <div class="col s3" ng-repeat="movie in movies | filter:Searchbox">
+            <div class="card small">
+
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" ng-src="{{movie.image}}" height="200" width="100">
+                </div>
+                <div class="card-content">
+                    <span class="card-title activator grey-text text-darken-4">{{movie.movie_title}}<i class="material-icons right">more_vert</i></span>
+                    <p>Rating : {{movie.rating}} /5</p>
+
+                    <div class="mycards">
+                        <a class="waves-effect waves-light red btn modal-trigger" ng-click="modalTrigger(movie)" href="#book_now">BOOK NOW!</a>
+                    </div>
+
+                    <!-- Modal Structure for book now button-->
+
+                    <div id="{{movie._id}}" class="modal">
+                        <!-- unique id for modal -->
+
+
+                        <div class="modal-header">
+
+
+                            <nav>
+                                <div class="nav-wrapper">
+                                    <div class="col s12">
+                                        <a href="#!" class="breadcrumb">Today's Shows</a>
+
+                                        <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat right ">X</a>
+                                    </div>
+                                </div>
+                            </nav>
+                            <h5>Click on show timing to book {{movie.movie_title}}</h5>
+
+                            <div ng-repeat="t in movie.theaters">
+                                <strong> Theater:  {{t.theater_name}} --> </strong><br><br>
+                                <div ng-if="t.show_timings.length !== 0" class="row">
+                                    <div class="col s2" ng-repeat="show in t.show_timings">
+                                        <button class="#607d8b blue-grey btn" ng-click="select_show(show,t)">{{show.time}}</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p>Your show time is: <strong>{{ticket.showtime}}</strong></p>
+
+                            <!-- dropdown for no of seats-->
+                            <div class="row">
+                                <div class="col s3">
+                                    <label>Select</label>
+                                    <select class="browser-default" ng-model="mySelect" ng-change="showSelectValue(mySelect)">
+                                        <option value="" disabled selected>Select number of seats</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <p>You have selected <strong>{{mySelect}}</strong> seats</p><br>
+
+                            <a class="waves-effect waves-light red btn modal-trigger" ng-click="showme=true">Confirm booking</a>
+                            <br>
+                            <br>
+                            <div class="booking" ng-show="showme">
+                                <strong>BOOKING SUMMARY</strong>
+                                <br>Movie: {{movie.movie_title}} --> $10 x {{mySelect}}
+
+
+                                <p> Amount Payable $ {{total_price}}</p>  
+
+                        
+                                <a class="waves-effect waves-light red btn modal-trigger" ng-click="reduce_seats(movie)">PROCEED</a> </div>
+                            
+                                <!-- paypl button-->
+                                <div class="pay" hidden>
+                                    <table>
+                                        <tr>
+                                            <td>Proceed for payment >></td>
+                                            <td>
+                                                <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                                                    <input type="hidden" name="cmd" value="_xclick">
+                                                    <input type="hidden" name="business" value="piyushazanjad@gmail.com">
+                                                    <input type="hidden" name="item_name" value={{movie.movie_title}}>
+                                                    <input type="hidden" name="currency_code" value="USD">
+                                                    <input type="hidden" name="amount" value=${{total_price}}>
+                                                    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                           
+                            <!-- div class="booking"-->
+
+                        </div>
+                        <!-- modal closed-->
+
+                        <nav>
+                            <div class="nav-wrapper">
+                                <div class="col s12">
+
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="card-reveal">
+                    <div class="col s12 l12">
+                        <span class="card-title grey-text text-darken-4">{{movie.movie_title}}<i class="material-icons right">close</i></span>
+                        <p>Summary: {{movie.desc}}</p>
+
+                        <p>Category: {{movie.category}}</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--footer -->
+
+    <footer class="page-footer red lighten-1 ">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">SELECT A FLICK PAY WITH A CLICK</h5>
+                    <p class="grey-text text-lighten-4">
+                        With BookMyMovie, paying for your movie and event tickets online is going to be insanely easy. Like, one-click easy.</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2016 Copyright Text
+
+            </div>
+        </div>
+    </footer>
+
+    <!-- Import jQuery before materialize.js -->
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.js"></script>
+
+    <script type="text/javascript" src="/materialize-v0.97.6/materialize/js/materialize.min.js"></script>
+
+
+
+    <!--shim is needed to support non-html5 browsers 
+
+    <script type="text/javascript" src="/bower_components/ng-file-upload/angular-file-upload-shim.js"></script>-->
+
+    <script type="text/javascript" src="/bower_components/angular-file-upload/dist/angular-file-upload.js"></script>
+
+    <!--  <script type="text/javascript" src="mainfile.js"></script>-->
+</body>
+
+</html>
